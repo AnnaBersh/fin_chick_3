@@ -3,16 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import './core/services/app_navigator.dart';
-import './core/services/sound_service.dart';
-import './core/services/storage_service.dart';
-import './features/main/view/loading/loading_screen.dart';
-import './features/onboarding/bloc/onboarding/bloc.dart';
-import './features/main/bloc/main/bloc.dart';
-import './features/main/bloc/daily_bonus/bloc.dart';
+import 'package:itd_2/presentation/blocs/daily_bonus_bloc/bloc.dart';
+import 'package:itd_2/presentation/blocs/main_bloc/bloc.dart';
+import 'package:itd_2/presentation/blocs/onboarding_bloc/bloc.dart';
+import 'package:itd_2/presentation/screens/main/loading/loading/loading_screen.dart';
+import 'package:itd_2/routes/app_router.dart';
 
 import './core/constants/app_colors.dart';
 import './core/constants/app_text.dart';
+import 'data/datasources/local/sound_service.dart';
+import 'data/datasources/local/storage_service.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => OnboardingBloc(storageService: storageService)),
         BlocProvider(create: (_) => MainBloc(storage: storageService)),
-        BlocProvider(create: (_) => DailyBonusBloc(storage: storageService)),
+        BlocProvider(create: (_) => BonusBloc(storage: storageService)),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -50,11 +50,11 @@ class MyApp extends StatelessWidget {
             ? AppTexts.appAndroidTitle
             : AppTexts.appIosTitle,
         theme: ThemeData(
-          primarySwatch: Colors.brown,
-          scaffoldBackgroundColor: AppColors.mainBLue,
+          primarySwatch: Colors.yellow,
+          scaffoldBackgroundColor: AppColors.topBlue80,
           fontFamily: 'Knewave',
         ),
-        initialRoute: LoadingScreen.routeName,
+        initialRoute: LoadScreen.routeName,
         onGenerateRoute: AppNavigator.generateRoutes,
       ),
     );
