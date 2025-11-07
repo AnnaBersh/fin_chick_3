@@ -2,14 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
 import '../../../../core/constants/app_text.dart';
-import '../../../blocs/onboarding_bloc/bloc.dart';
-import '../../../blocs/onboarding_bloc/event.dart';
-import '../../../blocs/onboarding_bloc/state.dart';
+import 'package:itd_2/data/datasources/local/storage_service.dart';
 import '../../main/main_screen.dart';
 
 class PostOnboardingScreen extends StatefulWidget {
@@ -39,6 +36,9 @@ class _PostOnboardingScreenState extends State<PostOnboardingScreen> {
     _limitFocus.addListener(() {
       if (_limitFocus.hasFocus) _ensureVisible(_limitKey);
     });
+    final storage = StorageService();
+    _savingCtrl.text = storage.getSavingGoal() ?? '';
+    _limitCtrl.text = storage.getLimitGoal() ?? '';
   }
 
   @override
@@ -80,151 +80,92 @@ class _PostOnboardingScreenState extends State<PostOnboardingScreen> {
             filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
             child: Container(color: AppColors.mainBlack.withOpacity(0.25)),
           ),
-          SafeArea(
-            child: BlocBuilder<OnboardingBloc, OnboardingState>(
-              builder: (context, state) {
-                final s = state is PostOnboardingState
-                    ? state
-                    : PostOnboardingState();
-                // keep controllers in sync with state
-                final savingText = s.goalAmount ?? '';
-                final limitText = s.limitAmount ?? '';
-                if (_savingCtrl.text != savingText) {
-                  _savingCtrl.text = savingText;
-                  _savingCtrl.selection = TextSelection.collapsed(
-                    offset: _savingCtrl.text.length,
-                  );
-                }
-                if (_limitCtrl.text != limitText) {
-                  _limitCtrl.text = limitText;
-                  _limitCtrl.selection = TextSelection.collapsed(
-                    offset: _limitCtrl.text.length,
-                  );
-                }
-                // focus requested field and ensure visible
-                if (s.goalType == GoalType.saving && !_savingFocus.hasFocus) {
-                  _savingFocus.requestFocus();
-                  _ensureVisible(_savingKey);
-                } else if (s.goalType == GoalType.limit &&
-                    !_limitFocus.hasFocus) {
-                  _limitFocus.requestFocus();
-                  _ensureVisible(_limitKey);
-                }
-
-                final saved = s.saved;
-                final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-
-                return GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () => FocusScope.of(context).unfocus(),
-                  child: SingleChildScrollView(
-                    controller: _scroll,
-                    padding: EdgeInsets.only(bottom: bottomInset + 24),
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 24),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 32),
-                          child: Text(
-                            saved
-                                ? AppTexts.postOnboardingTitle1
-                                : AppTexts.postOnboardingTitle2,
-                            textAlign: TextAlign.center,
-                            style: AppStyles.mediumYel.copyWith(fontSize: 20),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          height: 180,
-                          child: KeyedSubtree(
-                            key: _savingKey,
-                            child: _GoalCard(
-                              title: AppTexts.savingGoal,
-                              controller: _savingCtrl,
-                              focusNode: _savingFocus,
-                              editing: s.goalType == GoalType.saving && !saved,
-                              onTapTitle: () => context
-                                  .read<OnboardingBloc>()
-                                  .add(UpdateGoalType(GoalType.saving)),
-                              onChanged: (v) => context
-                                  .read<OnboardingBloc>()
-                                  .add(UpdateGoalAmount(v)),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 18),
-                        SizedBox(
-                          height: 180,
-                          child: KeyedSubtree(
-                            key: _limitKey,
-                            child: _GoalCard(
-                              title: AppTexts.spendingLimit,
-                              controller: _limitCtrl,
-                              focusNode: _limitFocus,
-                              editing: s.goalType == GoalType.limit && !saved,
-                              onTapTitle: () => context
-                                  .read<OnboardingBloc>()
-                                  .add(UpdateGoalType(GoalType.limit)),
-                              onChanged: (v) => context
-                                  .read<OnboardingBloc>()
-                                  .add(UpdateLimitAmount(v)),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        if (!saved)
-                          GestureDetector(
-                            onTap: () {
-                              context.read<OnboardingBloc>().add(SaveGoal());
-                              FocusScope.of(context).unfocus();
-                            },
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/bg_components/main_with_border.webp',
-                                  width: size.width * 0.5,
-                                  height: size.height*0.15,
-                                ),
-                                Text(
-                                  AppTexts.save,
-                                  style: AppStyles.bigButtonYel,
-                                ),
-                              ],
-                            ),
-                          )
-                        else
-                          GestureDetector(
-                            onTap: () =>
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                  MainScreen.routeName,
-                                  (route) => false,
-                                ),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/bg_components/main_with_border.webp',
-                                  width: size.width * 0.55,
-                                  height: size.height*0.15,
-                                ),
-                                Text(
-                                  AppTexts.main,
-                                  style: AppStyles.bigButtonYel,
-                                ),
-                              ],
-                            ),
-                          ),
-                        const SizedBox(height: 24),
-                      ],
+          Listener(
+            behavior: HitTestBehavior.translucent,
+            onPointerDown: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+            child: SafeArea(
+              child: SingleChildScrollView(
+                controller: _scroll,
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+                ),
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 24),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Text(
+                        AppTexts.postOnboardingTitle2,
+                        textAlign: TextAlign.center,
+                        style: AppStyles.mediumYel.copyWith(fontSize: 20),
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      height: 180,
+                      child: KeyedSubtree(
+                        key: _savingKey,
+                        child: _GoalCard(
+                          title: AppTexts.savingGoal,
+                          hintText: AppTexts.yourGoal,
+                          controller: _savingCtrl,
+                          focusNode: _savingFocus,
+                          onChanged: (v) async {
+                            await StorageService().setSavingGoal(v);
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    SizedBox(
+                      height: 180,
+                      child: KeyedSubtree(
+                        key: _limitKey,
+                        child: _GoalCard(
+                          title: AppTexts.spendingLimit,
+                          hintText: AppTexts.spendingLimit,
+                          controller: _limitCtrl,
+                          focusNode: _limitFocus,
+                          onChanged: (v) async {
+                            await StorageService().setLimitGoal(v);
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: () async {
+                        final storage = StorageService();
+                        await storage.setSavingGoal(_savingCtrl.text.trim());
+                        await storage.setLimitGoal(_limitCtrl.text.trim());
+                        FocusScope.of(context).unfocus();
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          MainScreen.routeName,
+                          (route) => false,
+                        );
+                      },
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/bg_components/main_with_border.webp',
+                            width: size.width * 0.55,
+                            height: size.height * 0.15,
+                          ),
+                          Text(
+                            AppTexts.main,
+                            style: AppStyles.bigButtonYel,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+                ),
+              ),
           ),
+          )
         ],
       ),
     );
@@ -235,17 +176,15 @@ class _GoalCard extends StatelessWidget {
   final String title;
   final TextEditingController controller;
   final FocusNode focusNode;
-  final bool editing;
-  final VoidCallback onTapTitle;
   final ValueChanged<String> onChanged;
+  final String hintText;
 
   const _GoalCard({
     required this.title,
     required this.controller,
     required this.focusNode,
-    required this.editing,
-    required this.onTapTitle,
     required this.onChanged,
+    required this.hintText
   });
 
   @override
@@ -265,63 +204,41 @@ class _GoalCard extends StatelessWidget {
                 image: AssetImage('assets/bg_components/main_with_border.webp'),
               ),
             ),
-            child: GestureDetector(
-              onTap: onTapTitle,
-              child: Align(
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (editing)
-                      SizedBox(
-                        width: size.width * 0.65,
-                        child: TextField(
-                          controller: controller,
-                          focusNode: focusNode,
-                          autofocus: true,
-                          maxLength: 7,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                          textAlign: TextAlign.center,
-                          keyboardType: TextInputType.number,
-                          style: AppStyles.mediumSecondBlue,
-                          decoration: InputDecoration(
-                            counterText: '',
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 12,
-                              horizontal: 12,
-                            ),
-                            filled: true,
-                            fillColor: AppColors.topYellow100,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                          onChanged: onChanged,
+            child: Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: size.width * 0.45,
+                    child: TextField(
+                      controller: controller,
+                      focusNode: focusNode,
+                      autofocus: false,
+                      maxLength: 7,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      style: AppStyles.mediumSecondBlue,
+                      decoration: InputDecoration(
+                        hintText: hintText,
+                        hintStyle: AppStyles.mediumSecondBlue.copyWith(fontSize: 12),
+                        counterText: '',
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 12,
                         ),
-                      )
-                    else
-                      GestureDetector(
-                        onTap: onTapTitle,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.topYellow100,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            controller.text.isEmpty
-                                ? AppTexts.yourGoal
-                                : controller.text,
-                            style: AppStyles.mediumSecondBlue,
-                          ),
+                        filled: true,
+                        fillColor: AppColors.topYellow100,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
                         ),
                       ),
-                  ],
-                ),
+                      onChanged: onChanged,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

@@ -141,8 +141,14 @@ class _AddNotesExpenseState extends State<AddNotesExpense> {
           ),
         ],
         leading: IconButton(
-          onPressed: () =>
-              context.pushNamedAndRemoveUntil(ChooseCategoryExpense.routeName),
+          onPressed: () async {
+            _dateController.clear();
+            _amountController.clear();
+            _notesController.clear();
+            await _storage.clearDraftExpense();
+            if (!mounted) return;
+            context.pushNamedAndRemoveUntil(ChooseCategoryExpense.routeName);
+          },
           icon: Image.asset('assets/general_buttons/back_icon.webp'),
         ),
       ),

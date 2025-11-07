@@ -56,18 +56,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
               _buildSheetButton(
                 label: AppTexts.gallery,
                 onTap: () async {
-                  await _bloc.pickAvatar(ImageSource.gallery);
-                  if (!mounted) return;
                   Navigator.of(ctx).pop();
+                  await Future.delayed(const Duration(milliseconds: 120));
+                  await _bloc.pickAvatar(ImageSource.gallery);
                 },
               ),
               const SizedBox(height: 8),
               _buildSheetButton(
                 label: AppTexts.camera,
                 onTap: () async {
-                  await _bloc.pickAvatar(ImageSource.camera);
-                  if (!mounted) return;
                   Navigator.of(ctx).pop();
+                  await Future.delayed(const Duration(milliseconds: 120));
+                  await _bloc.pickAvatar(ImageSource.camera);
                 },
               ),
               const SizedBox(height: 8),

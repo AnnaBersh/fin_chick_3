@@ -590,7 +590,7 @@ class _MainScreenState extends State<MainScreen>
                                 border: InputBorder.none,
                                 hintText: '0',
                                 hintStyle: AppStyles.mediumYel.copyWith(
-                                  color: Colors.white70,
+                                  color: AppColors.mainWhite,
                                 ),
                                 errorText: error,
                               ),

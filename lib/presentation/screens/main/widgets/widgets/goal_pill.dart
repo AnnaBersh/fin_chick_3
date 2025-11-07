@@ -24,7 +24,6 @@ class GoalPill extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            color: AppColors.mainBlack.withOpacity(0.25),
             child: Text(
               title,
               style: AppStyles.mediumYel.copyWith(fontSize: 13),
