@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
 import '../../../../core/constants/app_text.dart';
@@ -102,35 +101,29 @@ class _PostOnboardingScreenState extends State<PostOnboardingScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    SizedBox(
-                      height: 180,
-                      child: KeyedSubtree(
-                        key: _savingKey,
-                        child: _GoalCard(
-                          title: AppTexts.savingGoal,
-                          hintText: AppTexts.yourGoal,
-                          controller: _savingCtrl,
-                          focusNode: _savingFocus,
-                          onChanged: (v) async {
-                            await StorageService().setSavingGoal(v);
-                          },
-                        ),
+                    KeyedSubtree(
+                      key: _savingKey,
+                      child: _GoalCard(
+                        title: AppTexts.savingGoal,
+                        hintText: AppTexts.yourGoal,
+                        controller: _savingCtrl,
+                        focusNode: _savingFocus,
+                        onChanged: (v) async {
+                          await StorageService().setSavingGoal(v);
+                        },
                       ),
                     ),
                     const SizedBox(height: 18),
-                    SizedBox(
-                      height: 180,
-                      child: KeyedSubtree(
-                        key: _limitKey,
-                        child: _GoalCard(
-                          title: AppTexts.spendingLimit,
-                          hintText: AppTexts.spendingLimit,
-                          controller: _limitCtrl,
-                          focusNode: _limitFocus,
-                          onChanged: (v) async {
-                            await StorageService().setLimitGoal(v);
-                          },
-                        ),
+                    KeyedSubtree(
+                      key: _limitKey,
+                      child: _GoalCard(
+                        title: AppTexts.spendingLimit,
+                        hintText: AppTexts.spendingLimit,
+                        controller: _limitCtrl,
+                        focusNode: _limitFocus,
+                        onChanged: (v) async {
+                          await StorageService().setLimitGoal(v);
+                        },
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -150,8 +143,8 @@ class _PostOnboardingScreenState extends State<PostOnboardingScreen> {
                         children: [
                           Image.asset(
                             'assets/bg_components/main_with_border.webp',
-                            width: size.width * 0.55,
-                            height: size.height * 0.15,
+                            width: size.width * 0.6,
+                           // height: size.height * 0.12,
                           ),
                           Text(
                             AppTexts.main,
@@ -197,7 +190,7 @@ class _GoalCard extends StatelessWidget {
           Center(child: Text(title, style: AppStyles.onboardingMainTextYel)),
           SizedBox(height: 5,),
           Container(
-            width: size.width * 0.95, height: size.height*0.2,
+            width: size.width * 0.95, height: size.height*0.18,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -242,6 +235,7 @@ class _GoalCard extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 15,)
         ],
       ),
     );
