@@ -35,8 +35,8 @@ class GoalPill extends StatelessWidget {
             alignment: Alignment.centerLeft,
             children: [
               Image.asset(
-                'assets/bg_components/main_with_border.webp',
-                width: size.width * 0.42, height: size.height * 0.1,
+                'assets/bg_components/main_button.webp',
+                width: size.width * 0.42, height: size.height * 0.08,
                 fit: BoxFit.fill,
               ),
               Row(

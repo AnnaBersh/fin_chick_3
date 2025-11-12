@@ -166,14 +166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           child: Container(
                             width: size.width * 0.32,
                             height: size.width * 0.32,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: AppColors.borderColor,
-                                width: 5,
-                              ),
-                            ),
-                            clipBehavior: Clip.antiAlias,
+
                             child: state.avatarPath != null
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(20),
@@ -261,16 +254,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
                       SizedBox(height: size.height * 0.02),
-                      _NavButton(
-                        label: AppTexts.privacy,
-                        onTap: () => context.pushNamedAndRemoveUntil(
+                      IconButton(
+                        icon: Image.asset('assets/general_buttons/privacy_button.webp'),
+                        onPressed: () => context.pushNamedAndRemoveUntil(
                           PrivacyPolicy.routeName,
                         ),
                       ),
                       SizedBox(height: size.height * 0.015),
-                      _NavButton(
-                        label: AppTexts.termsOfUse,
-                        onTap: () => context.pushNamedAndRemoveUntil(
+                      IconButton(
+                        icon: Image.asset('assets/general_buttons/terms_button.webp'),
+                        onPressed: () => context.pushNamedAndRemoveUntil(
                           TermsOfUse.routeName,
                         ),
                       ),
@@ -322,32 +315,6 @@ class _SettingTile extends StatelessWidget {
             activeTrackColor: AppColors.mainOrange,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _NavButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onTap;
-
-  const _NavButton({required this.label, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 56, width: 350,
-        decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: AssetImage('assets/bg_components/main_with_border.webp'),
-            fit: BoxFit.fill,
-          ),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        alignment: Alignment.center,
-        child: Text(label.toUpperCase(), style: AppStyles.titleAppBarYel),
       ),
     );
   }

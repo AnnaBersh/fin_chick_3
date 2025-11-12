@@ -6,7 +6,7 @@ class AppColors {
   const AppColors._();
 
 
-  static const mainTextColor = Color(0xFFFFFE17);  //main
+  static const mainTextColor = Color(0xFFFBB500);  //main
   static const mainWhite =  Color(0xFFFFFFFF);
   static const mainBlack =  Color (0xFF000000);
 

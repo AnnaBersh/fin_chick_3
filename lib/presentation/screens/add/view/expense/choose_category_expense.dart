@@ -51,13 +51,16 @@ class _ChooseCategoryExpenseState extends State<ChooseCategoryExpense> {
     ];
 
     return Scaffold(
+      extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+
         elevation: 0,
         leading: IconButton(
           icon: Image.asset('assets/general_buttons/back_icon.webp'),
-          onPressed: () => context.pushNamedAndRemoveUntil(AddedScreen.routeName),
+          onPressed: () =>
+              context.pushNamedAndRemoveUntil(AddedScreen.routeName),
         ),
         actions: [
           IconButton(
@@ -84,23 +87,23 @@ class _ChooseCategoryExpenseState extends State<ChooseCategoryExpense> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Container(
-                  width: double.infinity,
-                  color: AppColors.topYellow100,
-                  child: Center(
-                    child: Text(
-                      AppTexts.expense,
-                      style: AppStyles.mediumWhite,
+                  width: double.infinity, height: 50,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        'assets/bg_components/expense_bottom.webp',
+                      ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 5),
 
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
-                    vertical: 8,
+                  //  vertical: 8,
                   ),
                   child: GridView.builder(
                     itemCount: categories.length,
@@ -116,7 +119,8 @@ class _ChooseCategoryExpenseState extends State<ChooseCategoryExpense> {
                       return InkWell(
                         borderRadius: BorderRadius.circular(20),
                         onTap: () => _onCategoryTap(title),
-                        child: Container(padding: EdgeInsets.symmetric(horizontal: 4),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 4),
                           decoration: BoxDecoration(
                             image: const DecorationImage(
                               image: AssetImage(
@@ -129,9 +133,7 @@ class _ChooseCategoryExpenseState extends State<ChooseCategoryExpense> {
                           child: Text(
                             textAlign: TextAlign.center,
                             title.toUpperCase(),
-                            style: AppStyles.smallYel.copyWith(
-                              fontSize: 17,
-                            ),
+                            style: AppStyles.smallYel.copyWith(fontSize: 19),
                           ),
                         ),
                       );

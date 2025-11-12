@@ -142,7 +142,7 @@ class _PostOnboardingScreenState extends State<PostOnboardingScreen> {
                         alignment: Alignment.center,
                         children: [
                           Image.asset(
-                            'assets/bg_components/main_with_border.webp',
+                            'assets/bg_components/main_button.webp',
                             width: size.width * 0.6,
                            // height: size.height * 0.12,
                           ),

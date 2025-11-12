@@ -74,11 +74,8 @@ class _ChooseCategoryIncomeState extends State<ChooseCategoryIncome> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(color: AppColors.topBlue100),
-                  child: Center(
-                    child: Text(AppTexts.income, style: AppStyles.mediumWhite),
-                  ),
+                  width: double.infinity, height: 50,
+                 decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/bg_components/incom_bottom.webp'))),
                 ),
               ),
               SizedBox(height: 20),
@@ -116,7 +113,7 @@ class _ChooseCategoryIncomeState extends State<ChooseCategoryIncome> {
                           child: Text(
                             title.toUpperCase(),
                             style: AppStyles.smallYel.copyWith(
-                              fontSize: 17,
+                              fontSize: 20,
                             ),
                           ),
                         ),

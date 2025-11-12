@@ -54,9 +54,9 @@ class PreOnboardingScreen extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Container(height: size.height*0.15,
+                  SizedBox(height: size.height*0.15,
                     child: Image.asset(
-                      'assets/bg_components/main_with_border.webp',
+                      'assets/bg_components/main_button.webp',
                       width: size.width * 0.65,
                     ),
                   ),

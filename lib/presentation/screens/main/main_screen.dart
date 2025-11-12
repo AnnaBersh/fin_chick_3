@@ -188,6 +188,16 @@ class _MainScreenState extends State<MainScreen>
                                 ),
                               ),
                             ),
+                            SizedBox()
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(),
                             // Daily bonus button + text
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -201,7 +211,7 @@ class _MainScreenState extends State<MainScreen>
                                   },
                                   child: Image.asset(
                                     'assets/general_buttons/daily_bonus_button.webp',
-                                    height: 58,
+                                    height: 65,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
@@ -211,7 +221,7 @@ class _MainScreenState extends State<MainScreen>
                                     AppTexts.getBonus,
                                     textAlign: TextAlign.center,
                                     style: AppStyles.smallYel.copyWith(
-                                      fontSize: 13,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),
@@ -220,6 +230,7 @@ class _MainScreenState extends State<MainScreen>
                           ],
                         ),
                       ),
+
                       const Spacer(),
 
                       // Basket with dynamic fill
@@ -289,7 +300,8 @@ class _MainScreenState extends State<MainScreen>
                                               decoration: BoxDecoration(
                                                 boxShadow: [
                                                   BoxShadow(
-                                                    color: AppColors.topYellow100
+                                                    color: AppColors
+                                                        .topYellow100
                                                         .withOpacity(
                                                           0.4 +
                                                               0.3 *
@@ -359,7 +371,10 @@ class _MainScreenState extends State<MainScreen>
                               fit: BoxFit.fill,
                             ),
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppColors.borderColor, width: 3)
+                            border: Border.all(
+                              color: AppColors.borderColor,
+                              width: 3,
+                            ),
                           ),
                           padding: const EdgeInsets.symmetric(
                             vertical: 12,
@@ -557,7 +572,7 @@ class _MainScreenState extends State<MainScreen>
                             textAlign: TextAlign.center,
                             style: AppStyles.mediumYel.copyWith(fontSize: 20),
                           ),
-                          const SizedBox(height: 20, width: 250,),
+                          const SizedBox(height: 20, width: 250),
                           Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
